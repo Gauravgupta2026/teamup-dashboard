@@ -12,8 +12,11 @@ import {
 } from '@/components/ui/table';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import CustomerEditModal from '@/components/CustomerEditModal';
-import { Search } from 'lucide-react';
+import { Search, Plus, UserPlus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useToast } from '@/hooks/use-toast';
 
 interface Customer {
   id: number;
@@ -27,6 +30,10 @@ const CustomerList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [editCustomer, setEditCustomer] = useState<Customer | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewCustomerModalOpen, setIsNewCustomerModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   // Sample data
   const customers: Customer[] = [
@@ -56,13 +63,33 @@ const CustomerList = () => {
     setEditCustomer(null);
   };
 
+  const handleAddNewCustomer = () => {
+    setIsNewCustomerModalOpen(true);
+  };
+
+  const handleNewCustomerModalClose = () => {
+    setIsNewCustomerModalOpen(false);
+  };
+
+  // Simulate loading
+  const toggleLoading = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "Action completed",
+        description: "Customer data has been updated successfully",
+      });
+    }, 1500);
+  };
+
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex flex-col md:flex-row min-h-screen bg-white">
       <Sidebar />
       
       <div className="flex-1 overflow-y-auto">
-        <main className="p-6 md:p-10 max-w-7xl mx-auto animate-fade-in">
-          <h1 className="text-3xl font-semibold mb-6">Customer List</h1>
+        <main className="p-4 md:p-10 max-w-7xl mx-auto animate-fade-in">
+          <h1 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Customer List</h1>
           
           <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
             <div className="relative w-full sm:w-64">
@@ -74,36 +101,57 @@ const CustomerList = () => {
                 className="pl-8 h-9 text-sm"
               />
             </div>
-            <Button>Add New Customer</Button>
+            <Button onClick={handleAddNewCustomer}>
+              <UserPlus className="h-4 w-4 mr-2" /> Add New Customer
+            </Button>
           </div>
           
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone Number</TableHead>
-                  <TableHead>Registration Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCustomers.map((customer) => (
-                  <TableRow key={customer.id}>
-                    <TableCell className="font-medium">{customer.name}</TableCell>
-                    <TableCell>{customer.email}</TableCell>
-                    <TableCell>{customer.phone}</TableCell>
-                    <TableCell>{customer.registrationDate}</TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="outline" size="sm" onClick={() => handleEditClick(customer)}>
-                        Edit
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+            {isLoading ? (
+              <div className="p-4 space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="flex flex-col space-y-3">
+                    <Skeleton className="h-10 w-full" />
+                  </div>
                 ))}
-              </TableBody>
-            </Table>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead className={isMobile ? "hidden md:table-cell" : ""}>Email</TableHead>
+                      <TableHead className={isMobile ? "hidden md:table-cell" : ""}>Phone Number</TableHead>
+                      <TableHead className={isMobile ? "hidden md:table-cell" : ""}>Registration Date</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCustomers.map((customer) => (
+                      <TableRow key={customer.id}>
+                        <TableCell className="font-medium">
+                          <div>
+                            {customer.name}
+                            <div className="md:hidden text-xs text-gray-500">
+                              {customer.email}
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className={isMobile ? "hidden md:table-cell" : ""}>{customer.email}</TableCell>
+                        <TableCell className={isMobile ? "hidden md:table-cell" : ""}>{customer.phone}</TableCell>
+                        <TableCell className={isMobile ? "hidden md:table-cell" : ""}>{customer.registrationDate}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="outline" size="sm" onClick={() => handleEditClick(customer)}>
+                            Edit
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </div>
           
           <div className="mt-6">
@@ -134,7 +182,28 @@ const CustomerList = () => {
         <CustomerEditModal 
           customer={editCustomer} 
           isOpen={isModalOpen} 
-          onClose={handleModalClose} 
+          onClose={() => {
+            handleModalClose();
+            toggleLoading();
+          }} 
+        />
+      )}
+
+      {isNewCustomerModalOpen && (
+        <CustomerEditModal 
+          customer={{ 
+            id: 0, 
+            name: '', 
+            email: '', 
+            phone: '', 
+            registrationDate: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) 
+          }} 
+          isOpen={isNewCustomerModalOpen} 
+          onClose={() => {
+            handleNewCustomerModalClose();
+            toggleLoading();
+          }} 
+          isNewCustomer={true}
         />
       )}
     </div>

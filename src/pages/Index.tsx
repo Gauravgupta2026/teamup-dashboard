@@ -5,9 +5,21 @@ import TournamentCard from '@/components/TournamentCard';
 import LiveMatch from '@/components/LiveMatch';
 import DateSelector from '@/components/DateSelector';
 import BookingTable from '@/components/BookingTable';
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Users, CreditCard, Calendar } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
   const [selectedDate, setSelectedDate] = useState('Today');
+  const isMobile = useIsMobile();
+
+  // Sample data for the metrics
+  const metrics = {
+    totalClientsBooked: 42,
+    totalRevenue: 38500,
+    totalMatchesPlayed: 16
+  };
 
   // Sample data for the dashboard
   const tournaments = [
@@ -37,34 +49,83 @@ const Index = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex flex-col md:flex-row min-h-screen bg-white">
       <Sidebar />
       
       <div className="flex-1 overflow-y-auto">
-        <main className="p-6 md:p-10 max-w-7xl mx-auto">
+        <main className="p-4 md:p-10 max-w-7xl mx-auto">
           <div className="animate-fade-in">
-            <h1 className="text-3xl font-semibold mb-10">Welcome, Gaurav</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-10">Welcome, Gaurav</h1>
+            
+            {/* Metrics Cards */}
+            <section className="mb-6 md:mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Card className="bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Total Clients Booked</p>
+                      <h3 className="text-2xl font-bold mt-2">{metrics.totalClientsBooked}</h3>
+                      <p className="text-xs text-gray-500 mt-1">Today</p>
+                    </div>
+                    <div className="rounded-full p-2 bg-blue-100">
+                      <Users className="h-5 w-5 text-blue-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Total Revenue Collected</p>
+                      <h3 className="text-2xl font-bold mt-2">₹{metrics.totalRevenue.toLocaleString()}</h3>
+                      <p className="text-xs text-gray-500 mt-1">Today</p>
+                    </div>
+                    <div className="rounded-full p-2 bg-green-100">
+                      <CreditCard className="h-5 w-5 text-green-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-500">Total Matches Played</p>
+                      <h3 className="text-2xl font-bold mt-2">{metrics.totalMatchesPlayed}</h3>
+                      <p className="text-xs text-gray-500 mt-1">Today</p>
+                    </div>
+                    <div className="rounded-full p-2 bg-purple-100">
+                      <Calendar className="h-5 w-5 text-purple-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
             
             {/* Upcoming Tournaments Section */}
-            <section className="mb-10">
+            <section className="mb-6 md:mb-10">
               <h2 className="text-xl font-medium mb-4">Upcoming Tournaments</h2>
-              <div className="bg-black rounded-xl p-8">
-                <div className="flex space-x-8 overflow-x-auto pb-4">
+              <div className="bg-black rounded-xl p-4 md:p-8">
+                <div className="flex space-x-4 md:space-x-8 overflow-x-auto pb-4 snap-x">
                   {tournaments.map((tournament) => (
-                    <TournamentCard 
-                      key={tournament.id}
-                      gradientClass={tournament.gradientClass}
-                      date={tournament.date}
-                    />
+                    <div key={tournament.id} className="snap-start">
+                      <TournamentCard 
+                        gradientClass={tournament.gradientClass}
+                        date={tournament.date}
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
             </section>
             
             {/* Live Match Section */}
-            <section className="mb-10">
+            <section className="mb-6 md:mb-10">
               <h2 className="text-xl font-medium mb-4">Live Match</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {liveMatches.map((match) => (
                   <LiveMatch 
                     key={match.id}
@@ -80,7 +141,7 @@ const Index = () => {
             </section>
             
             {/* Date Selection Bar */}
-            <section className="mb-10">
+            <section className="mb-6 md:mb-10 overflow-x-auto">
               <DateSelector 
                 dates={dateSelections}
                 selectedDate={selectedDate}
