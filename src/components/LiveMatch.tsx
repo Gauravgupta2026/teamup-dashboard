@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import LiveMatchDialog from './LiveMatchDialog';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LiveMatchProps {
   type: 'live' | 'next' | 'upcoming';
@@ -23,6 +24,7 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
   onClick
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleClick = () => {
     if (onClick) {
