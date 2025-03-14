@@ -1,5 +1,7 @@
 
 import React from 'react';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
 
 interface Booking {
   time: string;
@@ -19,32 +21,37 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings }) => {
     <div className="animate-slide-up">
       <div className="text-xl font-semibold mb-4">Team Up Pvt. Ltd.</div>
       <div className="overflow-x-auto">
-        <table className="booking-table">
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>Customer</th>
-              <th>Booking ID</th>
-              <th>Ground</th>
-              <th>Status</th>
-              <th>Booking</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Time</TableHead>
+              <TableHead>Customer</TableHead>
+              <TableHead>Booking ID</TableHead>
+              <TableHead>Ground</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Booking</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {bookings.map((booking, index) => (
-              <tr key={index} className="hover:bg-gray-50 transition-colors">
-                <td>{booking.time}</td>
-                <td>{booking.customer}</td>
-                <td>{booking.bookingId}</td>
-                <td>{booking.ground}</td>
-                <td className={booking.status === 'unpaid' ? 'status-unpaid' : ''}>
-                  {booking.status === 'unpaid' ? 'Unpaid' : 'Paid'}
-                </td>
-                <td>{booking.action || '-'}</td>
-              </tr>
+              <TableRow key={index} className="hover:bg-gray-50 transition-colors">
+                <TableCell>{booking.time}</TableCell>
+                <TableCell>{booking.customer}</TableCell>
+                <TableCell>{booking.bookingId}</TableCell>
+                <TableCell>{booking.ground}</TableCell>
+                <TableCell>
+                  <span className={cn(
+                    "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                    booking.status === 'paid' ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                  )}>
+                    {booking.status === 'unpaid' ? 'Unpaid' : 'Paid'}
+                  </span>
+                </TableCell>
+                <TableCell>{booking.action || '-'}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

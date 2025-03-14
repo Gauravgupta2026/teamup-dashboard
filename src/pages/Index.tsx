@@ -30,10 +30,10 @@ const Index = () => {
   ];
 
   const bookings = [
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' },
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' },
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' },
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' },
+    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' as const },
+    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' as const },
+    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' as const },
+    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'paid' as const },
   ];
 
   return (
