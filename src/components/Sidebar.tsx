@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   Menu,
@@ -16,11 +17,14 @@ import {
   Briefcase,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
 
 const menuItems = [
   { name: 'Overview', icon: LayoutDashboard, href: '#' },
@@ -45,6 +49,9 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const isMobile = useIsMobile();
+  const { signOut, user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -53,6 +60,23 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
   const filteredMenuItems = menuItems.filter(item => 
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account",
+      });
+      navigate('/auth');
+    } catch (error) {
+      toast({
+        title: "Sign out failed",
+        description: "There was an error signing out",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Mobile sidebar design
   if (isMobile) {
@@ -111,6 +135,26 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
             ))}
           </ul>
         </nav>
+
+        {/* User profile and logout at the bottom */}
+        <div className="mt-auto border-t border-gray-200 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                <span className="text-gray-700 text-sm font-medium">
+                  {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                </span>
+              </div>
+              <div className="ml-2">
+                <p className="text-sm font-medium">{user?.user_metadata?.name || 'User'}</p>
+                <p className="text-xs text-gray-500 truncate max-w-[150px]">{user?.email}</p>
+              </div>
+            </div>
+            <Button variant="ghost" size="icon" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -119,7 +163,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
   return (
     <div
       className={cn(
-        'h-screen bg-sidebar relative transition-all duration-300 ease-in-out border-r border-gray-200',
+        'h-screen bg-sidebar relative transition-all duration-300 ease-in-out border-r border-gray-200 flex flex-col',
         isCollapsed ? 'w-[70px]' : 'w-[250px]',
         className
       )}
@@ -183,6 +227,35 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
             ))}
           </ul>
         </nav>
+
+        {/* User profile and logout at the bottom */}
+        <div className={cn(
+          "mt-auto border-t border-gray-200 p-4",
+          isCollapsed && "flex justify-center p-2"
+        )}>
+          {isCollapsed ? (
+            <Button variant="ghost" size="icon" onClick={handleSignOut} className="h-8 w-8">
+              <LogOut className="h-4 w-4" />
+            </Button>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="h-8 w-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                  <span className="text-gray-700 text-sm font-medium">
+                    {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  </span>
+                </div>
+                <div className="ml-2">
+                  <p className="text-sm font-medium">{user?.user_metadata?.name || 'User'}</p>
+                  <p className="text-xs text-gray-500 truncate max-w-[150px]">{user?.email}</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="icon" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import TournamentCard from '@/components/TournamentCard';
 import LiveMatch from '@/components/LiveMatch';
@@ -10,71 +12,44 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useAuth } from '@/hooks/use-auth';
+import { useTournaments } from '@/hooks/use-tournaments';
+import { useLiveMatches } from '@/hooks/use-matches';
+import { useBookings } from '@/hooks/use-bookings';
+import { useMetrics } from '@/hooks/use-metrics';
 
 const Index = () => {
   const [selectedDate, setSelectedDate] = useState('Today');
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { user, isLoading: authLoading } = useAuth();
+  const navigate = useNavigate();
 
-  // Sample data for the metrics
-  const metrics = {
-    totalClientsBooked: 42,
-    totalRevenue: 38500,
-    totalMatchesPlayed: 16
-  };
+  const { data: tournaments, isLoading: tournamentsLoading } = useTournaments();
+  const { data: liveMatches, isLoading: matchesLoading } = useLiveMatches();
+  const { data: bookings, isLoading: bookingsLoading } = useBookings(selectedDate);
+  const { data: metricsData, isLoading: metricsLoading } = useMetrics();
 
-  // Sample data for the dashboard
-  const tournaments = [
-    { id: 1, name: 'Europa League', logo: '/lovable-uploads/6b3ebf9f-8f9c-4b0a-9ab6-06103afd60ae.png', date: 'March 20-27th', gradientClass: 'tournament-gradient-1' },
-    { id: 2, name: 'La Liga', logo: '/placeholder.svg', date: 'March 20-27th', gradientClass: 'tournament-gradient-2' },
-    { id: 3, name: 'Bundesliga', logo: '/placeholder.svg', date: 'March 20-27th', gradientClass: 'tournament-gradient-3' },
-    { id: 4, name: 'Premier League', logo: '/placeholder.svg', date: 'March 20-27th', gradientClass: 'tournament-gradient-4' },
-  ];
+  // If user is not authenticated, redirect to auth page
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [authLoading, user, navigate]);
 
-  const liveMatches = [
-    { id: 1, type: 'live', player: 'Real Madrid', time: '16:00 - 18:00', team: 5, ground: 'M. City', status: 'unpaid' },
-    { id: 2, type: 'live', player: 'Tottenham', time: '20:00 - 21:00', team: 5, ground: 'PSG', status: 'unpaid' },
-    { id: 3, type: 'live', player: 'Liverpool', time: '16:00 - 18:00', team: 5, ground: 'Chelsea', status: 'unpaid' },
-    { id: 4, type: 'live', player: 'Bayern', time: '16:00 - 18:00', team: 5, ground: 'Barcelona', status: 'unpaid' },
-  ];
+  // If still loading auth or user is not authenticated, show loading spinner
+  if (authLoading || !user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+      </div>
+    );
+  }
 
+  // Date selections for the DateSelector component
   const dateSelections = [
     'Today', '10th March', '11th March', '12th March', '13th March', 
     '14th March', '15th March', '16th March', '17th March', '18th March'
-  ];
-
-  const bookings = [
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' as const },
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' as const },
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'unpaid' as const },
-    { time: '16:00 - 18:00', customer: 'Aarav Bhandari', bookingId: 'x220-905172', ground: 'G1A', status: 'paid' as const },
-  ];
-
-  const latestNews = [
-    { 
-      id: 1, 
-      title: "Rumour Has It: Lampard's position under threat...", 
-      date: "04 JAN 2021, 14:16",
-      image: "/placeholder.svg" 
-    },
-    { 
-      id: 2, 
-      title: "Arteta sees 'natural leader' Tierney as a future...", 
-      date: "04 JAN 2021, 05:30",
-      image: "/placeholder.svg" 
-    },
-    { 
-      id: 3, 
-      title: "Athletic Bilbao to appoint Marcelino as coach until...", 
-      date: "04 JAN 2021, 09:23",
-      image: "/placeholder.svg" 
-    },
-    { 
-      id: 4, 
-      title: "Barcelona suffer too much late in games, says Ter Stegen", 
-      date: "04 JAN 2021, 06:06",
-      image: "/placeholder.svg" 
-    }
   ];
 
   return (
@@ -115,7 +90,7 @@ const Index = () => {
           isMobile && "pt-16 pb-6"
         )}>
           <div className="animate-fade-in">
-            {!isMobile && <h1 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-10">Welcome, Gaurav</h1>}
+            {!isMobile && <h1 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-10">Welcome, {user.user_metadata.name || 'User'}</h1>}
             
             {/* Metrics Cards - More compact on mobile */}
             <section className="mb-5 grid grid-cols-3 gap-2">
@@ -134,7 +109,7 @@ const Index = () => {
                   <h3 className={cn(
                     "text-lg font-bold", 
                     isMobile && "text-base"
-                  )}>{metrics.totalClientsBooked}</h3>
+                  )}>{metricsLoading ? '...' : metricsData?.total_clients_booked}</h3>
                 </CardContent>
               </Card>
               
@@ -153,10 +128,10 @@ const Index = () => {
                   <h3 className={cn(
                     "text-lg font-bold",
                     isMobile && "text-base"
-                  )}>₹{metrics.totalRevenue.toLocaleString('en-IN', { 
+                  )}>₹{metricsLoading ? '...' : (metricsData?.total_revenue.toLocaleString('en-IN', { 
                     notation: 'compact',
                     maximumFractionDigits: 1
-                  })}</h3>
+                  }))}</h3>
                 </CardContent>
               </Card>
               
@@ -175,7 +150,7 @@ const Index = () => {
                   <h3 className={cn(
                     "text-lg font-bold",
                     isMobile && "text-base"
-                  )}>{metrics.totalMatchesPlayed}</h3>
+                  )}>{metricsLoading ? '...' : metricsData?.total_matches_played}</h3>
                 </CardContent>
               </Card>
             </section>
@@ -193,30 +168,47 @@ const Index = () => {
               {isMobile ? (
                 <div className="bg-black rounded-xl p-4 overflow-x-auto scrollbar-none">
                   <div className="flex space-x-4 snap-x snap-mandatory">
-                    {tournaments.map((tournament) => (
-                      <div key={tournament.id} className="snap-center flex-shrink-0">
-                        <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center overflow-hidden">
-                          <img 
-                            src={tournament.logo} 
-                            alt={tournament.name} 
-                            className="w-10 h-10 object-contain"
-                          />
+                    {tournamentsLoading ? (
+                      [...Array(4)].map((_, i) => (
+                        <div key={i} className="snap-center flex-shrink-0">
+                          <div className="w-14 h-14 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden animate-pulse">
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      tournaments?.map((tournament) => (
+                        <div key={tournament.id} className="snap-center flex-shrink-0">
+                          <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img 
+                              src={tournament.logo_url || '/placeholder.svg'} 
+                              alt={tournament.name} 
+                              className="w-10 h-10 object-contain"
+                            />
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               ) : (
                 <div className="bg-black rounded-xl p-4 md:p-8">
                   <div className="flex space-x-4 md:space-x-8 overflow-x-auto pb-4 snap-x">
-                    {tournaments.map((tournament) => (
-                      <div key={tournament.id} className="snap-start">
-                        <TournamentCard 
-                          gradientClass={tournament.gradientClass}
-                          date={tournament.date}
-                        />
-                      </div>
-                    ))}
+                    {tournamentsLoading ? (
+                      [...Array(4)].map((_, i) => (
+                        <div key={i} className="snap-start">
+                          <div className="w-64 h-32 rounded-xl bg-gray-700 animate-pulse"></div>
+                        </div>
+                      ))
+                    ) : (
+                      tournaments?.map((tournament) => (
+                        <div key={tournament.id} className="snap-start">
+                          <TournamentCard 
+                            gradientClass={tournament.gradient_class || ''}
+                            date={tournament.date}
+                          />
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               )}
@@ -234,17 +226,23 @@ const Index = () => {
               
               <div className="overflow-x-auto pb-2 -mx-4 px-4">
                 <div className="flex space-x-3 snap-x snap-mandatory min-w-full">
-                  {liveMatches.map((match) => (
-                    <LiveMatch 
-                      key={match.id}
-                      type={match.type as 'live' | 'next' | 'upcoming'}
-                      player={match.player}
-                      time={match.time}
-                      team={match.team}
-                      ground={match.ground}
-                      status={match.status as 'paid' | 'unpaid'}
-                    />
-                  ))}
+                  {matchesLoading ? (
+                    [...Array(4)].map((_, i) => (
+                      <div key={i} className="snap-start min-w-[180px] md:min-w-[240px] h-[160px] rounded-lg bg-gray-100 animate-pulse"></div>
+                    ))
+                  ) : (
+                    liveMatches?.map((match) => (
+                      <LiveMatch 
+                        key={match.id}
+                        type={match.type}
+                        player={match.player}
+                        time={match.time}
+                        team={match.team}
+                        ground={match.ground}
+                        status={match.status}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
             </section>
@@ -260,7 +258,16 @@ const Index = () => {
             
             {/* Booking List Section - For both mobile and desktop */}
             <section>
-              <BookingTable bookings={bookings} />
+              <BookingTable 
+                bookings={bookings?.map(booking => ({
+                  time: booking.time,
+                  customer: booking.customer,
+                  bookingId: booking.booking_id,
+                  ground: booking.ground,
+                  status: booking.status
+                })) || []} 
+                isLoading={bookingsLoading}
+              />
             </section>
           </div>
         </main>
