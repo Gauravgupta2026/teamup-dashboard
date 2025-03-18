@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from '@/components/Sidebar';
 import TournamentCard from '@/components/TournamentCard';
@@ -250,67 +249,19 @@ const Index = () => {
               </div>
             </section>
             
-            {/* Latest News Section - Mobile Only */}
-            {isMobile && (
-              <section className="mb-6">
-                <div className="flex justify-between items-center mb-3">
-                  <h2 className="text-base font-medium">Latest News</h2>
-                </div>
-                
-                <div className="space-y-3">
-                  {/* Featured News */}
-                  <div className="relative w-full h-40 rounded-lg overflow-hidden bg-gray-100">
-                    <img 
-                      src="/placeholder.svg" 
-                      alt="Featured news" 
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                        <div className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center">
-                          <div className="border-t-6 border-l-6 border-transparent border-r-6 border-r-black translate-x-0.5"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* News List */}
-                  {latestNews.slice(0, 2).map(news => (
-                    <div key={news.id} className="flex gap-3">
-                      <div className="w-14 h-14 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-                        <img 
-                          src={news.image} 
-                          alt={news.title} 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-xs font-medium line-clamp-2">{news.title}</h3>
-                        <p className="text-[10px] text-gray-500 mt-1">{news.date}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
+            {/* Date Selection Bar and Bookings Table - For both mobile and desktop */}
+            <section className="mb-6 md:mb-10 overflow-x-auto">
+              <DateSelector 
+                dates={dateSelections}
+                selectedDate={selectedDate}
+                onSelectDate={setSelectedDate}
+              />
+            </section>
             
-            {/* Date Selection Bar - Only for non-mobile */}
-            {!isMobile && (
-              <section className="mb-6 md:mb-10 overflow-x-auto">
-                <DateSelector 
-                  dates={dateSelections}
-                  selectedDate={selectedDate}
-                  onSelectDate={setSelectedDate}
-                />
-              </section>
-            )}
-            
-            {/* Booking List Section - Only for non-mobile */}
-            {!isMobile && (
-              <section>
-                <BookingTable bookings={bookings} />
-              </section>
-            )}
+            {/* Booking List Section - For both mobile and desktop */}
+            <section>
+              <BookingTable bookings={bookings} />
+            </section>
           </div>
         </main>
       </div>

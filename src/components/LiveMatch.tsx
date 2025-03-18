@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import LiveMatchDialog from './LiveMatchDialog';
@@ -33,13 +34,13 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
     }
   };
 
-  // Mobile design based on the screenshot
+  // Mobile design with all information preserved
   if (isMobile) {
     return (
       <>
         <div 
           className={cn(
-            'snap-start min-w-[180px] h-[120px] rounded-lg cursor-pointer flex flex-col justify-between p-3',
+            'snap-start min-w-[180px] h-[160px] rounded-lg cursor-pointer flex flex-col justify-between p-3',
             type === 'live' && 'bg-blue-600 text-white',
             type === 'next' && 'bg-gray-100 text-black border border-gray-200',
             type === 'upcoming' && 'bg-gray-100 text-black border border-gray-200',
@@ -52,6 +53,8 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
             </div>
           )}
           
+          <div className="text-xs mt-2">{time}</div>
+          
           <div className="mt-auto">
             <div className="flex justify-between items-baseline mb-1">
               <div className="text-sm font-semibold">{player.split(' ')[0]}</div>
@@ -60,6 +63,16 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
             <div className="flex justify-between items-baseline">
               <div className="text-xs font-medium opacity-80">{ground}</div>
               <div className="text-lg font-bold">1</div>
+            </div>
+            
+            <div className="flex flex-wrap justify-between items-center mt-2">
+              <div className="text-xs">Team: {team}</div>
+              <div className={cn(
+                'text-xs px-2 py-0.5 rounded-full',
+                status === 'unpaid' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+              )}>
+                {status === 'unpaid' ? 'Unpaid' : 'Paid'}
+              </div>
             </div>
           </div>
         </div>
