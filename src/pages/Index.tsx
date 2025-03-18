@@ -8,6 +8,7 @@ import BookingTable from '@/components/BookingTable';
 import { Card, CardContent } from '@/components/ui/card';
 import { Users, CreditCard, Calendar, Search } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 const Index = () => {
   const [selectedDate, setSelectedDate] = useState('Today');

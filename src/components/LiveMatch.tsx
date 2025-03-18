@@ -43,7 +43,7 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
             'snap-start min-w-[240px] h-[140px] rounded-lg cursor-pointer flex flex-col justify-between p-4',
             type === 'live' && 'bg-blue-600 text-white',
             type === 'next' && 'bg-gray-200 text-black',
-            type === 'upcoming' && 'bg-red-500 text-white',
+            type === 'upcoming' && 'bg-gray-200 text-black',
           )}
           onClick={handleClick}
         >
