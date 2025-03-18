@@ -188,7 +188,7 @@
   /* Mobile Optimizations */
   @media (max-width: 768px) {
     .match-card {
-      @apply min-w-[240px] snap-start;
+      @apply min-w-[180px] snap-start;
     }
     
     .glassmorphism {
@@ -226,6 +226,16 @@
   
   .scroll-item {
     @apply snap-start flex-shrink-0;
+  }
+  
+  /* Hide scrollbars for clean mobile design */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 }
 

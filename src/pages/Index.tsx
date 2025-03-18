@@ -6,13 +6,16 @@ import LiveMatch from '@/components/LiveMatch';
 import DateSelector from '@/components/DateSelector';
 import BookingTable from '@/components/BookingTable';
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, CreditCard, Calendar, Search } from 'lucide-react';
+import { Users, CreditCard, Calendar, Search, Menu } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const Index = () => {
   const [selectedDate, setSelectedDate] = useState('Today');
   const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Sample data for the metrics
   const metrics = {
@@ -77,74 +80,127 @@ const Index = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-white">
-      <Sidebar />
+      {/* For desktop, display the sidebar component normally */}
+      {!isMobile && <Sidebar />}
+      
+      {/* For mobile, create a minimal header with menu button */}
+      {isMobile && (
+        <header className="fixed top-0 left-0 right-0 h-14 bg-white z-40 flex items-center px-4 border-b">
+          <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0">
+              <Sidebar />
+            </SheetContent>
+          </Sheet>
+          
+          <div className="flex items-center justify-center flex-1">
+            <div className="flex items-center gap-1.5">
+              <div className="h-5 w-5 bg-yellow-400 rounded-full"></div>
+              <span className="font-bold text-base">SPORT2</span>
+            </div>
+          </div>
+          
+          <Button variant="ghost" size="icon" className="h-9 w-9">
+            <Search className="h-5 w-5" />
+          </Button>
+        </header>
+      )}
       
       <div className="flex-1 overflow-y-auto">
-        {isMobile && (
-          <header className="fixed top-0 left-0 right-0 h-16 bg-white z-40 flex items-center justify-center border-b">
-            <div className="flex items-center gap-1">
-              <div className="h-6 w-6 bg-yellow-400 rounded-full"></div>
-              <span className="font-bold text-xl">SPORT2</span>
-            </div>
-            <div className="absolute right-4">
-              <button className="p-2 rounded-full">
-                <Search className="h-5 w-5" />
-              </button>
-            </div>
-          </header>
-        )}
-        
         <main className={cn(
           "p-4 max-w-7xl mx-auto",
-          isMobile && "pt-20 pb-16"
+          isMobile && "pt-16 pb-6"
         )}>
           <div className="animate-fade-in">
             {!isMobile && <h1 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-10">Welcome, Gaurav</h1>}
             
-            {/* Metrics Cards */}
-            <section className="mb-6 grid grid-cols-3 gap-2">
-              <Card className="bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <CardContent className="p-3 flex flex-col items-center">
-                  <p className="text-xs font-medium text-gray-500">Clients</p>
-                  <h3 className="text-lg font-bold">{metrics.totalClientsBooked}</h3>
+            {/* Metrics Cards - More compact on mobile */}
+            <section className="mb-5 grid grid-cols-3 gap-2">
+              <Card className={cn(
+                "bg-white shadow-sm border border-gray-100",
+                isMobile && "p-0"
+              )}>
+                <CardContent className={cn(
+                  "p-3 flex flex-col items-center",
+                  isMobile && "p-2"
+                )}>
+                  <p className={cn(
+                    "text-xs font-medium text-gray-500",
+                    isMobile && "text-[10px]"
+                  )}>Clients</p>
+                  <h3 className={cn(
+                    "text-lg font-bold", 
+                    isMobile && "text-base"
+                  )}>{metrics.totalClientsBooked}</h3>
                 </CardContent>
               </Card>
               
-              <Card className="bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <CardContent className="p-3 flex flex-col items-center">
-                  <p className="text-xs font-medium text-gray-500">Revenue</p>
-                  <h3 className="text-lg font-bold">₹{metrics.totalRevenue.toLocaleString('en-IN', { 
+              <Card className={cn(
+                "bg-white shadow-sm border border-gray-100",
+                isMobile && "p-0"
+              )}>
+                <CardContent className={cn(
+                  "p-3 flex flex-col items-center",
+                  isMobile && "p-2"
+                )}>
+                  <p className={cn(
+                    "text-xs font-medium text-gray-500",
+                    isMobile && "text-[10px]"
+                  )}>Revenue</p>
+                  <h3 className={cn(
+                    "text-lg font-bold",
+                    isMobile && "text-base"
+                  )}>₹{metrics.totalRevenue.toLocaleString('en-IN', { 
                     notation: 'compact',
                     maximumFractionDigits: 1
                   })}</h3>
                 </CardContent>
               </Card>
               
-              <Card className="bg-white shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                <CardContent className="p-3 flex flex-col items-center">
-                  <p className="text-xs font-medium text-gray-500">Matches</p>
-                  <h3 className="text-lg font-bold">{metrics.totalMatchesPlayed}</h3>
+              <Card className={cn(
+                "bg-white shadow-sm border border-gray-100",
+                isMobile && "p-0"
+              )}>
+                <CardContent className={cn(
+                  "p-3 flex flex-col items-center",
+                  isMobile && "p-2"
+                )}>
+                  <p className={cn(
+                    "text-xs font-medium text-gray-500",
+                    isMobile && "text-[10px]"
+                  )}>Matches</p>
+                  <h3 className={cn(
+                    "text-lg font-bold",
+                    isMobile && "text-base"
+                  )}>{metrics.totalMatchesPlayed}</h3>
                 </CardContent>
               </Card>
             </section>
             
             {/* Leagues (Tournaments) Section */}
-            <section className="mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-medium">Leagues</h2>
+            <section className="mb-5">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className={cn(
+                  "text-xl font-medium",
+                  isMobile && "text-base"
+                )}>Leagues</h2>
                 <a href="#" className="text-sm text-gray-500">View All</a>
               </div>
               
               {isMobile ? (
-                <div className="bg-black rounded-xl p-4 overflow-x-auto">
+                <div className="bg-black rounded-xl p-4 overflow-x-auto scrollbar-none">
                   <div className="flex space-x-4 snap-x snap-mandatory">
                     {tournaments.map((tournament) => (
                       <div key={tournament.id} className="snap-center flex-shrink-0">
-                        <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                        <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center overflow-hidden">
                           <img 
                             src={tournament.logo} 
                             alt={tournament.name} 
-                            className="w-12 h-12 object-contain"
+                            className="w-10 h-10 object-contain"
                           />
                         </div>
                       </div>
@@ -168,14 +224,17 @@ const Index = () => {
             </section>
             
             {/* Live Match Section */}
-            <section className="mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-medium">Live Matches</h2>
+            <section className="mb-5">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className={cn(
+                  "text-xl font-medium",
+                  isMobile && "text-base"
+                )}>Live Matches</h2>
                 <a href="#" className="text-sm text-gray-500">View All</a>
               </div>
               
-              <div className="overflow-x-auto pb-4">
-                <div className="flex space-x-4 snap-x snap-mandatory min-w-full">
+              <div className="overflow-x-auto pb-2 -mx-4 px-4">
+                <div className="flex space-x-3 snap-x snap-mandatory min-w-full">
                   {liveMatches.map((match) => (
                     <LiveMatch 
                       key={match.id}
@@ -194,31 +253,31 @@ const Index = () => {
             {/* Latest News Section - Mobile Only */}
             {isMobile && (
               <section className="mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-medium">Latest News</h2>
+                <div className="flex justify-between items-center mb-3">
+                  <h2 className="text-base font-medium">Latest News</h2>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {/* Featured News */}
-                  <div className="relative w-full h-48 rounded-lg overflow-hidden bg-gray-200">
+                  <div className="relative w-full h-40 rounded-lg overflow-hidden bg-gray-100">
                     <img 
                       src="/placeholder.svg" 
                       alt="Featured news" 
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                        <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center">
-                          <div className="border-t-8 border-l-8 border-transparent border-r-8 border-r-black translate-x-1"></div>
+                      <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center">
+                          <div className="border-t-6 border-l-6 border-transparent border-r-6 border-r-black translate-x-0.5"></div>
                         </div>
                       </div>
                     </div>
                   </div>
                   
                   {/* News List */}
-                  {latestNews.map(news => (
+                  {latestNews.slice(0, 2).map(news => (
                     <div key={news.id} className="flex gap-3">
-                      <div className="w-16 h-16 bg-gray-200 rounded-md overflow-hidden flex-shrink-0">
+                      <div className="w-14 h-14 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
                         <img 
                           src={news.image} 
                           alt={news.title} 
@@ -226,8 +285,8 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-sm font-medium line-clamp-2">{news.title}</h3>
-                        <p className="text-xs text-gray-500 mt-1">{news.date}</p>
+                        <h3 className="text-xs font-medium line-clamp-2">{news.title}</h3>
+                        <p className="text-[10px] text-gray-500 mt-1">{news.date}</p>
                       </div>
                     </div>
                   ))}

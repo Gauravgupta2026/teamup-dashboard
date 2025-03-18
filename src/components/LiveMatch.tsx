@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import LiveMatchDialog from './LiveMatchDialog';
@@ -34,16 +33,16 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
     }
   };
 
-  // For mobile, simplified match cards matching the design
+  // Mobile design based on the screenshot
   if (isMobile) {
     return (
       <>
         <div 
           className={cn(
-            'snap-start min-w-[240px] h-[140px] rounded-lg cursor-pointer flex flex-col justify-between p-4',
+            'snap-start min-w-[180px] h-[120px] rounded-lg cursor-pointer flex flex-col justify-between p-3',
             type === 'live' && 'bg-blue-600 text-white',
-            type === 'next' && 'bg-gray-200 text-black',
-            type === 'upcoming' && 'bg-gray-200 text-black',
+            type === 'next' && 'bg-gray-100 text-black border border-gray-200',
+            type === 'upcoming' && 'bg-gray-100 text-black border border-gray-200',
           )}
           onClick={handleClick}
         >
@@ -54,13 +53,13 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
           )}
           
           <div className="mt-auto">
-            <div className="flex justify-between items-center mb-2">
-              <div className="text-lg font-bold">{player.split(' ')[0]}</div>
-              <div className="text-xl font-bold">0</div>
+            <div className="flex justify-between items-baseline mb-1">
+              <div className="text-sm font-semibold">{player.split(' ')[0]}</div>
+              <div className="text-lg font-bold">0</div>
             </div>
-            <div className="flex justify-between items-center">
-              <div className="font-medium">{ground}</div>
-              <div className="text-xl font-bold">1</div>
+            <div className="flex justify-between items-baseline">
+              <div className="text-xs font-medium opacity-80">{ground}</div>
+              <div className="text-lg font-bold">1</div>
             </div>
           </div>
         </div>
@@ -74,7 +73,7 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
     );
   }
 
-  // Desktop version
+  // Keep desktop version
   return (
     <>
       <div 
