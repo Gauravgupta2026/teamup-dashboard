@@ -156,6 +156,7 @@
     @apply bg-sports-red text-white font-medium;
   }
   
+  /* Match Card Styles */
   .match-card {
     @apply rounded-xl p-4 relative overflow-hidden transition-all duration-300 hover:shadow-lg;
   }
@@ -184,6 +185,22 @@
     @apply absolute top-4 left-4 bg-gray-200 text-gray-700 px-2 py-0.5 text-xs font-semibold rounded-full;
   }
   
+  /* Mobile Optimizations */
+  @media (max-width: 768px) {
+    .match-card {
+      @apply min-w-[240px] snap-start;
+    }
+    
+    .glassmorphism {
+      @apply bg-white/5;
+    }
+    
+    .card {
+      @apply shadow-sm;
+    }
+  }
+  
+  /* Table Styles */
   .booking-table {
     @apply w-full border-collapse;
   }
@@ -195,8 +212,38 @@
   .booking-table td {
     @apply py-4 px-4 text-sm border-t border-gray-100;
   }
+  
+  /* Horizontal Scroll Containers */
+  .scroll-container {
+    @apply flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .scroll-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scroll-item {
+    @apply snap-start flex-shrink-0;
+  }
 }
 
 .font-inter {
   font-family: 'Inter', sans-serif;
+}
+
+/* Additional Mobile Optimizations */
+@media (max-width: 768px) {
+  .container {
+    @apply px-3;
+  }
+  
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
+  
+  .stats-card {
+    @apply px-2 py-1;
+  }
 }

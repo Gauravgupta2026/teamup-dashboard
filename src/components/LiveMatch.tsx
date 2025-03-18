@@ -34,6 +34,47 @@ const LiveMatch: React.FC<LiveMatchProps> = ({
     }
   };
 
+  // For mobile, simplified match cards matching the design
+  if (isMobile) {
+    return (
+      <>
+        <div 
+          className={cn(
+            'snap-start min-w-[240px] h-[140px] rounded-lg cursor-pointer flex flex-col justify-between p-4',
+            type === 'live' && 'bg-blue-600 text-white',
+            type === 'next' && 'bg-gray-200 text-black',
+            type === 'upcoming' && 'bg-red-500 text-white',
+          )}
+          onClick={handleClick}
+        >
+          {type === 'live' && (
+            <div className="inline-flex items-center bg-white px-2 py-0.5 rounded-full text-xs font-medium text-blue-600 w-fit">
+              Live
+            </div>
+          )}
+          
+          <div className="mt-auto">
+            <div className="flex justify-between items-center mb-2">
+              <div className="text-lg font-bold">{player.split(' ')[0]}</div>
+              <div className="text-xl font-bold">0</div>
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="font-medium">{ground}</div>
+              <div className="text-xl font-bold">1</div>
+            </div>
+          </div>
+        </div>
+
+        <LiveMatchDialog 
+          isOpen={isDialogOpen} 
+          onClose={() => setIsDialogOpen(false)} 
+          matchData={{ type, player, time, team, ground, status }}
+        />
+      </>
+    );
+  }
+
+  // Desktop version
   return (
     <>
       <div 
