@@ -27,17 +27,11 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 
 const menuItems = [
-  { name: 'Overview', icon: LayoutDashboard, href: '#' },
   { name: 'Dashboard', icon: LayoutDashboard, href: '/', active: true },
-  { name: 'Analytics', icon: BarChart2, href: '/analytics' },
-  { name: 'Customers', icon: Users, href: '/customers', divider: true },
   { name: 'Bookings', icon: Calendar, href: '/bookings' },
   { name: 'Cancellations', icon: XCircle, href: '/cancellations' },
   { name: 'Client List', icon: UserCheck, href: '/client-list', divider: true },
   { name: 'Company', icon: Building2, href: '/company' },
-  { name: 'Staff', icon: UserCog, href: '/staff' },
-  { name: 'Documents', icon: FileText, href: '/documents' },
-  { name: 'Equipments', icon: Briefcase, href: '/equipments' }
 ];
 
 interface SidebarProps {
@@ -88,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
               <span className="text-black text-xs font-semibold">S</span>
             </div>
             <div className="font-semibold text-sm">
-              SPORT2
+              TeamUp
             </div>
           </div>
           {onClose && (
@@ -176,7 +170,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, onClose }) => {
               <span className="text-black text-xs font-semibold">S</span>
             </div>
             <div className="font-semibold text-sm">
-              SPORT2
+              Team Up
             </div>
           </div>
           <button 
