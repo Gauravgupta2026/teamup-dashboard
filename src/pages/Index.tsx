@@ -1,12 +1,13 @@
 
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
-import Hero from '../components/Hero';
 import Features from '../components/Features';
-import Scheduling from '../components/Scheduling';
 import LiveUpdates from '../components/LiveUpdates';
 import DownloadApp from '../components/DownloadApp';
 import Footer from '../components/Footer';
+import HomeScreen from '@/components/HeroSection';
+import NewSchedule from '../components/Scheduling';
+
 
 const Index = () => {
   useEffect(() => {
@@ -35,14 +36,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-teamup-dark">
-      <Header />
-      <main>
-        <Hero />
+
+        <HomeScreen />
         <Features />
-        <Scheduling />
+        <NewSchedule />
         <LiveUpdates />
-        <DownloadApp />
-      </main>
+        {/* <DownloadApp /> */}
+
       <Footer />
     </div>
   );

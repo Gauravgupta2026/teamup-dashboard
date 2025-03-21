@@ -30,7 +30,7 @@ const DownloadApp = () => {
   }, []);
 
   return (
-    <section className="section-padding bg-gray-100" id="download">
+    <section className="section-padding bg-white" id="download">
       <div className="container-custom">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>

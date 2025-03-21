@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Download } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Menu, X, Download, ArrowRightCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { cn } from '@/lib/utils';
 
@@ -28,28 +29,28 @@ const Header = () => {
         isScrolled ? "bg-white/90 dark:bg-teamup-dark/90 backdrop-blur-lg shadow-sm" : "bg-transparent"
       )}
     >
-      <div className="container-custom flex items-center justify-between">
-        <div className="flex items-center">
+      <div className=" mx-32 flex items-center justify-between">
+        <div className="flex">
           <a href="/" className="text-xl font-bold flex items-center">
-            <span className="gradient-text mr-1">Team</span>
-            <span className="font-extrabold">Up</span>
+            <span className="text-black text-2xl font-sans">Team</span>
+            <span className="text-black text-2xl font-sans">Up</span>
           </a>
         </div>
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-10">
-          <a href="#about" className="text-sm font-medium hover:text-teamup-blue transition-colors">About</a>
-          <a href="#memberships" className="text-sm font-medium hover:text-teamup-blue transition-colors">Memberships</a>
-          <a href="#events" className="text-sm font-medium hover:text-teamup-blue transition-colors">Events</a>
-          <a href="#contact" className="text-sm font-medium hover:text-teamup-blue transition-colors">Contact</a>
+          <a href="#about" className="text-sm font-normal hover:text-teamup-blue transition-colors">About</a>
+          <a href="#memberships" className="text-sm font-normal hover:text-teamup-blue transition-colors">Memberships</a>
+          <a href="#events" className="text-sm font-normal hover:text-teamup-blue transition-colors">Events</a>
+          <a href="#contact" className="text-sm font-normal hover:text-teamup-blue transition-colors">Contact</a>
         </nav>
 
-        <Button 
-          className="hidden md:flex items-center gap-2 bg-teamup-blue hover:bg-teamup-blue/90 text-white"
-          size="sm"
+        <Button variant='link'
+          className="bg-black md:flex items-center gap-4 rounded-full text-white"
+          size="lg" 
         >
-          <Download size={16} /> 
-          <span>Download the TeamUp app</span>
+          <ArrowRightCircle size={32} /> 
+          <span>Book Court</span>
         </Button>
 
         {/* Mobile menu button */}
@@ -67,40 +68,40 @@ const Header = () => {
           <nav className="flex flex-col space-y-4">
             <a 
               href="#about" 
-              className="text-sm font-medium py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-sm font-light py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={() => setMobileMenuOpen(false)}
             >
               About
             </a>
             <a 
               href="#memberships" 
-              className="text-sm font-medium py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-sm font-light py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={() => setMobileMenuOpen(false)}
             >
               Memberships
             </a>
             <a 
               href="#events" 
-              className="text-sm font-medium py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-sm font-light py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={() => setMobileMenuOpen(false)}
             >
               Events
             </a>
             <a 
               href="#contact" 
-              className="text-sm font-medium py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-sm font-light py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={() => setMobileMenuOpen(false)}
             >
               Contact
             </a>
-            <Button 
-              className="w-full flex items-center justify-center gap-2 bg-teamup-blue hover:bg-teamup-blue/90 text-white"
-              size="sm"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Download size={16} /> 
-              <span>Download the TeamUp app</span>
-            </Button>
+
+            <Link
+            to="/download"
+            className="hidden md:inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            <span>Download App</span>
+          </Link>
           </nav>
         </div>
       )}

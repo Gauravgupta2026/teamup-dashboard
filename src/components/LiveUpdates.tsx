@@ -95,7 +95,7 @@ const LiveUpdates = () => {
               </TabsList>
               
               <TabsContent value="live" className="mt-0">
-                <Card className="bg-gradient-to-br from-teamup-blue/10 to-teamup-purple/10 backdrop-blur-xl border-0 p-6 text-white h-[320px] flex flex-col">
+                <Card className="bg-gradient-to-br from-teamup-dark to-teamup-blue backdrop-blur-xl border-0 p-6 text-white h-[320px] flex flex-col">
                   <h3 className="text-xl font-bold mb-4">Follow Team Up for your favorite updates</h3>
                   <p className="text-gray-300 mb-6">
                     Get real-time updates on games, scores, and events happening right now across all our locations.
@@ -114,7 +114,7 @@ const LiveUpdates = () => {
               </TabsContent>
               
               <TabsContent value="food" className="mt-0">
-                <Card className="bg-gradient-to-br from-teamup-blue/10 to-teamup-purple/10 backdrop-blur-xl border-0 p-6 text-white h-[320px] flex flex-col">
+                <Card className="bg-gradient-to-br  from-teamup-dark to-teamup-blue backdrop-blur-xl border-0 p-6 text-white h-[320px] flex flex-col">
                   <h3 className="text-xl font-bold mb-4">This is for all your favorites</h3>
                   <p className="text-gray-300 mb-6">
                     Enjoy delicious food and refreshing drinks at our venues. Pre-order through the app and have your refreshments ready.
@@ -133,7 +133,7 @@ const LiveUpdates = () => {
               </TabsContent>
               
               <TabsContent value="community" className="mt-0">
-                <Card className="bg-gradient-to-br from-teamup-blue/10 to-teamup-purple/10 backdrop-blur-xl border-0 p-6 text-white h-[320px] flex flex-col">
+                <Card className="bg-gradient-to-br from-teamup-dark to-teamup-blue backdrop-blur-xl border-0 p-6 text-white h-[320px] flex flex-col">
                   <h3 className="text-xl font-bold mb-4">Build Connections, Meet like-minds & Experience Teamship</h3>
                   <p className="text-gray-300 mb-6">
                     Join our community of sports enthusiasts. Connect with like-minded individuals, join teams, and participate in events.

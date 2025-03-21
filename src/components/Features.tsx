@@ -1,5 +1,25 @@
-
 import React, { useEffect, useRef } from 'react';
+
+
+const sports = [
+  {
+    title: "Football",
+    image: "https://images.unsplash.com/photo-1553778263-73a83bab9b0c",
+  },
+  {
+    title: "Basketball",
+    image: "https://images.unsplash.com/photo-1546519638-68e109498ffc",
+  },
+  {
+    title: "Swimming",
+    image: "https://images.unsplash.com/photo-1530549387789-4c1017266635",
+  },
+  {
+    title: "Tennis",
+    image: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0",
+  },
+];
+
 
 const Features = () => {
   const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -28,80 +48,83 @@ const Features = () => {
   }, []);
 
   return (
-    <section className="section-padding bg-gray-50" id="about">
-      <div className="container-custom">
-        <div className="mb-12">
+    <section id="about">
+      <div className="mx-32">
+        <div className="mt-24">
           <h3
             ref={(el) => (elementsRef.current[0] = el)}
-            className="reveal text-sm text-gray-500 uppercase tracking-wider mb-2"
+            className="reveal text-xs font-sans font-light text-gray-400 uppercase mb-16"
           >
             Why Team Up
           </h3>
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto text-center items-center">
             <h2
               ref={(el) => (elementsRef.current[1] = el)}
-              className="reveal section-title"
+              className="reveal section-title text-3xl font-sans font-medium"
             >
               We are driven by a deep passion for sports and a commitment to empowering athletes of all levels.
             </h2>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          <div 
-            ref={(el) => (elementsRef.current[2] = el)}
-            className="reveal md:col-span-1 order-last md:order-first"
-          >
-            <div className="relative h-full w-full rounded-xl overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80" 
-                alt="Soccer player with ball" 
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                <span className="text-white font-medium">Find your passion</span>
-              </div>
-            </div>
-          </div>
-
+        <div className="flex flex-col items-center">
           <div 
             ref={(el) => (elementsRef.current[3] = el)}
-            className="reveal md:col-span-2"
+            className="reveal md:col-span-2 mx-auto text-center"
           >
-            <h3 className="text-2xl font-bold mb-6">
-              We solve your daily problems for sports and activities bookings
-            </h3>
-            <p className="text-gray-600 mb-8 leading-relaxed">
+            <p className="text-gray-600 mb-24 mt-8 px-32 font-light text-sm leading-relaxed">
               Our platform simplifies the process of finding, booking, and managing sports facilities and activities. 
               We understand the challenges that athletes, teams, and facility managers face, and we've developed 
               solutions that address these pain points.
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { id: 1, image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1490&q=80", name: "Basketball" },
-                { id: 2, image: "https://images.unsplash.com/photo-1560089000-7433a4ebbd64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1532&q=80", name: "Swimming" },
-                { id: 3, image: "https://images.unsplash.com/photo-1529926706528-db9e5010cd3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80", name: "Football" },
-                { id: 4, image: "https://images.unsplash.com/photo-1530915365347-e35b749a0381?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80", name: "Tennis" },
-              ].map((sport, index) => (
-                <div 
-                  key={sport.id}
-                  ref={(el) => (elementsRef.current[4 + index] = el)}
-                  className="reveal relative rounded-lg overflow-hidden group card-hover aspect-square"
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              {sports.map((sport) => (
+                <div
+                  key={sport.title}
+                  className="relative aspect-square overflow-hidden mx-auto"
                 >
-                  <img 
-                    src={sport.image} 
-                    alt={sport.name} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  <img
+                    src={sport.image}
+                    alt={sport.title}
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent flex items-end justify-center p-3">
-                    <span className="text-white font-medium text-sm">{sport.name}</span>
+                  <div className="absolute inset-0 bg-black/40">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <h3 className="text-white text-xl font-medium">{sport.title}</h3>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 text-sm text-gray-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative aspect-video overflow-hidden mx-auto">
+                <img
+                  src="https://images.unsplash.com/photo-1574629810360-7efbbe195018"
+                  alt="Indoor court"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center">
+                  <h3 className="text-white text-2xl font-medium mb-2">Book a Court</h3>
+                  <p className="text-white/80"><u>Explore here</u></p>
+                </div>
+              </div>
+              
+              <div className="relative aspect-video overflow-hidden mx-auto">
+                <img
+                  src="https://images.unsplash.com/photo-1574629810360-7efbbe195018"
+                  alt="Event venue"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center">
+                  <h3 className="text-white text-2xl font-medium mb-2">Event Details</h3>
+                  <p className="text-white/80"><u>Book updates</u></p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-20 text-sm text-gray-500 text-center">
               <p>Practice like you've never won, play like you've never lost. Our mission is to help you play at your best.</p>
               <p className="mt-1 font-medium">We support all your favorite sports and activities.</p>
             </div>
