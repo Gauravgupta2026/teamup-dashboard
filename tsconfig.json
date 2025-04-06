@@ -9,6 +9,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["@emotion/react", "@emotion/styled"],
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
